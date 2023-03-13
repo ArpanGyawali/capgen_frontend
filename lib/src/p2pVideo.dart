@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 class P2PVideo extends StatefulWidget {
   const P2PVideo({Key? key}) : super(key: key);
-  static const String SERVER_URL = "http://localhost:8000";
+  static const String SERVER_URL = "http://localhost:8080";
 
   @override
   _P2PVideoState createState() => _P2PVideoState();
@@ -72,7 +72,7 @@ class _P2PVideoState extends State<P2PVideo> {
   }
 
   void _toggleCamera() async {
-    if (_localStream ==  null) throw Exception('Stream is not initialized');
+    if (_localStream == null) throw Exception('Stream is not initialized');
 
     final videoTrack = _localStream!
         .getVideoTracks()
@@ -258,7 +258,7 @@ class _P2PVideoState extends State<P2PVideo> {
                       // height: MediaQuery.of(context).size.width > 500
                       //     ? 500
                       //     : MediaQuery.of(context).size.width - 20,
-                      constraints: BoxConstraints(maxHeight: 450),
+                      constraints: BoxConstraints(maxHeight: 500),
                       // width: MediaQuery.of(context).size.width > 500
                       //     ? 500
                       //     : MediaQuery.of(context).size.width - 20,
@@ -313,18 +313,28 @@ class _P2PVideoState extends State<P2PVideo> {
                     child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        Row(),
+                        //Row(),
                         SizedBox(
                           width: 20,
                         ),
-                        Text(
-                          _caption,
-                          style: TextStyle(
-                            fontSize: 24,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+
+                        Container(
+                          padding: const EdgeInsets.all(10.0),
+                          color: Colors.amber[10],
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: 450),
+                            child: Center(
+                              child: Text(
+                                "Caption:\nBackend I walk in lonely road the only one that I have ever known",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                  //fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        )
                       ],
                     ),
                   ),
