@@ -166,8 +166,11 @@ class _P2PVideoState extends State<P2PVideo> {
       'video': {
         'mandatory': {
           'minWidth':
-              '450', // Provide your own width, height and frame rate here
-          'minHeight': '450',
+              '224', // Provide your own width, height and frame rate here
+          'minHeight': '224',
+          'maxWidth':
+              '224', // Provide your own width, height and frame rate here
+          'maxHeight': '224',
           'minFrameRate': '30',
           'maxFrameRate': '30',
         },
@@ -325,7 +328,7 @@ class _P2PVideoState extends State<P2PVideo> {
                             constraints: BoxConstraints(maxWidth: 450),
                             child: Center(
                               child: Text(
-                                "Caption:\nBackend I walk in lonely road the only one that I have ever known",
+                                _caption,
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
