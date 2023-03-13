@@ -72,7 +72,7 @@ class _P2PVideoState extends State<P2PVideo> {
   }
 
   void _toggleCamera() async {
-    if (_localStream == null) throw Exception('Stream is not initialized');
+    if (_localStream ==  null) throw Exception('Stream is not initialized');
 
     final videoTrack = _localStream!
         .getVideoTracks()
@@ -318,7 +318,7 @@ class _P2PVideoState extends State<P2PVideo> {
                           width: 20,
                         ),
                         Text(
-                          "Caption:\n \t backend",
+                          _caption,
                           style: TextStyle(
                             fontSize: 24,
                             color: Colors.white,
