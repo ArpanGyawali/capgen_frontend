@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 class P2PVideo extends StatefulWidget {
   const P2PVideo({Key? key}) : super(key: key);
-  static const String SERVER_URL = "http://localhost:8080";
+  static const String SERVER_URL = "http://localhost:8000";
 
   @override
   _P2PVideoState createState() => _P2PVideoState();
@@ -161,13 +161,20 @@ class _P2PVideoState extends State<P2PVideo> {
       _addDataChannel(channel);
     };
 
+    _peerConnection!.onConnectionState = (state) {
+      print("CONNECTION STATE: $state");
+    };
+
     final mediaConstraints = <String, dynamic>{
       'audio': false,
       'video': {
         'mandatory': {
+          'maxWidth':
+              '224', // Provide your own width, height and frame rate here
+          'maxHeight': '224',
           'minWidth':
-              '450', // Provide your own width, height and frame rate here
-          'minHeight': '450',
+              '224', // Provide your own width, height and frame rate here
+          'minHeight': '224',
           'minFrameRate': '30',
           'maxFrameRate': '30',
         },
@@ -219,6 +226,7 @@ class _P2PVideoState extends State<P2PVideo> {
     try {
       // await _localStream?.dispose();
       await _dataChannel?.close();
+      print("close peer connection");
       await _peerConnection?.close();
       _peerConnection = null;
       _localRenderer.srcObject = null;
@@ -258,7 +266,7 @@ class _P2PVideoState extends State<P2PVideo> {
                       // height: MediaQuery.of(context).size.width > 500
                       //     ? 500
                       //     : MediaQuery.of(context).size.width - 20,
-                      constraints: BoxConstraints(maxHeight: 450),
+                      constraints: BoxConstraints(maxHeight: 550),
                       // width: MediaQuery.of(context).size.width > 500
                       //     ? 500
                       //     : MediaQuery.of(context).size.width - 20,
