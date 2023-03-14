@@ -321,18 +321,28 @@ class _P2PVideoState extends State<P2PVideo> {
                     child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        Row(),
+                        //Row(),
                         SizedBox(
                           width: 20,
                         ),
-                        Text(
-                          "Caption:\n \t backend",
-                          style: TextStyle(
-                            fontSize: 24,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+
+                        Container(
+                          padding: const EdgeInsets.all(10.0),
+                          color: Colors.amber[10],
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: 450),
+                            child: Center(
+                              child: Text(
+                                _caption,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                  //fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        )
                       ],
                     ),
                   ),
