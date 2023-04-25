@@ -30,6 +30,8 @@ dependencies:
   flutter_webrtc: ^0.6.5
   http: ^0.13.3
   equatable: ^2.0.3
+  flutter_tts: ^3.5.1
+  text_to_speech: ^0.2.3
 
 dev_dependencies:
   flutter_test:

@@ -1,13 +1,18 @@
+// ignore_for_file: unnecessary_statements
+
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:flutter_tts/flutter_tts_web.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:http/http.dart' as http;
+import 'package:text_to_speech/text_to_speech.dart';
 
 class P2PVideo extends StatefulWidget {
   const P2PVideo({Key? key}) : super(key: key);
-  static const String SERVER_URL = "http://localhost:8000";
+  static const String SERVER_URL = "http://localhost:8080";
 
   @override
   _P2PVideoState createState() => _P2PVideoState();
@@ -30,6 +35,32 @@ class _P2PVideoState extends State<P2PVideo> {
   bool _loading = false;
 
   String _caption = "";
+
+  TtsState _ttsstate = TtsState.stopped;
+
+  FlutterTts flutterTts = FlutterTts();
+
+  void setFlutterTtsConfig() async {
+    await flutterTts.setLanguage('en-US');
+    await flutterTts.setPitch(2);
+    await flutterTts.setVolume(1.0);
+    await flutterTts.setSpeechRate(0.5);
+  }
+
+  Future<void> textToSpeech(String text) async {
+    print(_ttsstate);
+    if (_ttsstate == TtsState.stopped) {
+      setState(() {
+        _ttsstate = TtsState.playing;
+      });
+
+      await flutterTts.speak(text);
+      setState(() {
+        _ttsstate = TtsState.stopped;
+      });
+    }
+    print(_ttsstate);
+  }
 
   void _onTrack(RTCTrackEvent event) {
     print("TRACK EVENT: ${event.streams.map((e) => e.id)}, ${event.track.id}");
@@ -129,6 +160,13 @@ class _P2PVideoState extends State<P2PVideo> {
   }
 
   Future<void> _makeCall() async {
+    // var r1 = flutterTts.speak("This is a text");
+
+    // var r2 = flutterTts.speak("ta madarchod");
+    // var r3 = await flutterTts.speak("speak something");
+    // print("$r1, $r2, $r3");
+    // return;
+
     setState(() {
       _loading = true;
     });
@@ -165,16 +203,19 @@ class _P2PVideoState extends State<P2PVideo> {
       print("CONNECTION STATE: $state");
     };
 
+    var height = 300;
+    var width = 300;
+
     final mediaConstraints = <String, dynamic>{
       'audio': false,
       'video': {
         'mandatory': {
           'maxWidth':
-              '224', // Provide your own width, height and frame rate here
-          'maxHeight': '224',
+              width, // Provide your own width, height and frame rate here
+          'maxHeight': height,
           'minWidth':
-              '224', // Provide your own width, height and frame rate here
-          'minHeight': '224',
+              width, // Provide your own width, height and frame rate here
+          'minHeight': height,
           'minFrameRate': '30',
           'maxFrameRate': '30',
         },
@@ -210,9 +251,11 @@ class _P2PVideoState extends State<P2PVideo> {
 
   void _addDataChannel(RTCDataChannel channel) {
     _dataChannel = channel;
+
     _dataChannel!.onMessage = (data) {
       // yo message chai text box ko ma store garne
       print("MSG: , ${data.text}");
+      flutterTts.speak(data.text);
       setState(() {
         _caption = data.text;
       });
@@ -245,8 +288,9 @@ class _P2PVideoState extends State<P2PVideo> {
   @override
   void initState() {
     super.initState();
-
+    // initialize all the app specific initializations
     initLocalRenderers();
+    setFlutterTtsConfig();
   }
 
   @override
